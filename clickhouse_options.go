@@ -218,6 +218,12 @@ func (o *Options) fromDSN(in string) error {
 				return errors.Wrap(err, "max_compression_buffer invalid value")
 			}
 			o.MaxCompressionBuffer = max
+		case "tcp_protocol_version":
+			version, err := strconv.Atoi(params.Get(v))
+			if err != nil {
+				return errors.Wrap(err, "max_compression_buffer invalid value")
+			}
+			o.ClientInfo.TCPProtocolVersion = uint64(version)
 		case "dial_timeout":
 			duration, err := time.ParseDuration(params.Get(v))
 			if err != nil {
@@ -362,6 +368,9 @@ func (o Options) setDefaults() *Options {
 	}
 	if o.MaxCompressionBuffer <= 0 {
 		o.MaxCompressionBuffer = 10485760
+	}
+	if o.ClientInfo.TCPProtocolVersion == 0 {
+		o.ClientInfo.TCPProtocolVersion = ClientTCPProtocolDefaultVersion
 	}
 	if o.Addr == nil || len(o.Addr) == 0 {
 		switch o.Protocol {

@@ -164,6 +164,7 @@ conn.SetConnMaxLifetime(time.Hour)
 * block_buffer_size - size of block buffer (default 2)
 * read_timeout - a duration string is a possibly signed sequence of decimal numbers, each with optional fraction and a unit suffix such as "300ms", "1s". Valid time units are "ms", "s", "m" (default 5m).
 * max_compression_buffer - max size (bytes) of compression buffer during column by column compression (default 10MiB)
+* tcp_protocol_version - set the tcp protocol version to support the corresponding server version, the corresponding values can be obtained from `src/Core/ProtocolDefines.h`, e.g. `tcp_protocol_version=54453`
 * client_info_product - optional list (comma separated) of product name and version pair separated with `/`. This value will be pass a part of client info. e.g. `client_info_product=my_app/1.0,my_module/0.1` More details in [Client info](#client-info) section.
 
 SSL/TLS parameters:

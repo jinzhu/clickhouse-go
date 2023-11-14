@@ -19,19 +19,20 @@ package clickhouse
 
 import (
 	"fmt"
-	"github.com/ClickHouse/clickhouse-go/v2/lib/proto"
 	"runtime"
 	"sort"
 	"strings"
+
+	"github.com/ClickHouse/clickhouse-go/v2/lib/proto"
 )
 
 const ClientName = "clickhouse-go"
 
 const (
-	ClientVersionMajor       = 2
-	ClientVersionMinor       = 14
-	ClientVersionPatch       = 3
-	ClientTCPProtocolVersion = proto.DBMS_TCP_PROTOCOL_VERSION
+	ClientVersionMajor              = 2
+	ClientVersionMinor              = 14
+	ClientVersionPatch              = 3
+	ClientTCPProtocolDefaultVersion = proto.DBMS_TCP_PROTOCOL_VERSION
 )
 
 type ClientInfo struct {
@@ -39,6 +40,7 @@ type ClientInfo struct {
 		Name    string
 		Version string
 	}
+	TCPProtocolVersion uint64
 
 	comment []string
 }
