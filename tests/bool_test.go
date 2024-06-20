@@ -22,12 +22,13 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"fmt"
-	"github.com/ClickHouse/clickhouse-go/v2"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"math/rand"
 	"testing"
 	"time"
+
+	"github.com/ClickHouse/clickhouse-go/v2"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestBool(t *testing.T) {
@@ -179,8 +180,8 @@ func TestBoolFlush(t *testing.T) {
 	batch, err := conn.PrepareBatch(ctx, "INSERT INTO bool_flush")
 	require.NoError(t, err)
 	vals := [1000]bool{}
-	var src = rand.NewSource(time.Now().UnixNano())
-	var r = rand.New(src)
+	src := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(src)
 
 	for i := 0; i < 1000; i++ {
 		vals[i] = r.Intn(2) != 0
@@ -235,8 +236,8 @@ func TestBoolValuer(t *testing.T) {
 	batch, err := conn.PrepareBatch(ctx, "INSERT INTO bool_flush")
 	require.NoError(t, err)
 	vals := [1000]bool{}
-	var src = rand.NewSource(time.Now().UnixNano())
-	var r = rand.New(src)
+	src := rand.NewSource(time.Now().UnixNano())
+	r := rand.New(src)
 
 	for i := 0; i < 1000; i++ {
 		vals[i] = r.Intn(2) != 0

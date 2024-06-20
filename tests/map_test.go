@@ -69,8 +69,8 @@ func TestMap(t *testing.T) {
 		}
 		col3Data = map[string]uint64{}
 		col4Data = []map[string]string{
-			map[string]string{"A": "B"},
-			map[string]string{"C": "D"},
+			{"A": "B"},
+			{"C": "D"},
 		}
 		col5Data = map[string]string{
 			"key_col_5_1": "100",
