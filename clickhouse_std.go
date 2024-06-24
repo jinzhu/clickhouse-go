@@ -46,7 +46,7 @@ type stdConnOpener struct {
 }
 
 func (o *stdConnOpener) Driver() driver.Driver {
-	var debugf = func(format string, v ...any) {}
+	debugf := func(format string, v ...any) {}
 	if o.opt.Debug {
 		if o.opt.Debugf != nil {
 			debugf = o.opt.Debugf
@@ -95,7 +95,7 @@ func (o *stdConnOpener) Connect(ctx context.Context) (_ driver.Conn, err error) 
 			num = (random + i) % len(o.opt.Addr)
 		}
 		if conn, err = dialFunc(ctx, o.opt.Addr[num], connID, o.opt); err == nil {
-			var debugf = func(format string, v ...any) {}
+			debugf := func(format string, v ...any) {}
 			if o.opt.Debug {
 				if o.opt.Debugf != nil {
 					debugf = o.opt.Debugf
@@ -118,7 +118,7 @@ func (o *stdConnOpener) Connect(ctx context.Context) (_ driver.Conn, err error) 
 var _ driver.Connector = (*stdConnOpener)(nil)
 
 func init() {
-	var debugf = func(format string, v ...any) {}
+	debugf := func(format string, v ...any) {}
 	sql.Register("clickhouse", &stdDriver{debugf: debugf})
 }
 
@@ -141,7 +141,7 @@ func Connector(opt *Options) driver.Connector {
 
 	o := opt.setDefaults()
 
-	var debugf = func(format string, v ...any) {}
+	debugf := func(format string, v ...any) {}
 	if o.Debug {
 		if o.Debugf != nil {
 			debugf = o.Debugf
@@ -156,7 +156,7 @@ func Connector(opt *Options) driver.Connector {
 }
 
 func OpenDB(opt *Options) *sql.DB {
-	var debugf = func(format string, v ...any) {}
+	debugf := func(format string, v ...any) {}
 	if opt == nil {
 		opt = &Options{}
 	}
@@ -206,11 +206,13 @@ type stdDriver struct {
 	debugf func(format string, v ...any)
 }
 
-var _ driver.Conn = (*stdDriver)(nil)
-var _ driver.ConnBeginTx = (*stdDriver)(nil)
-var _ driver.ExecerContext = (*stdDriver)(nil)
-var _ driver.QueryerContext = (*stdDriver)(nil)
-var _ driver.ConnPrepareContext = (*stdDriver)(nil)
+var (
+	_ driver.Conn               = (*stdDriver)(nil)
+	_ driver.ConnBeginTx        = (*stdDriver)(nil)
+	_ driver.ExecerContext      = (*stdDriver)(nil)
+	_ driver.QueryerContext     = (*stdDriver)(nil)
+	_ driver.ConnPrepareContext = (*stdDriver)(nil)
+)
 
 func (std *stdDriver) Open(dsn string) (_ driver.Conn, err error) {
 	var opt Options
@@ -219,7 +221,7 @@ func (std *stdDriver) Open(dsn string) (_ driver.Conn, err error) {
 		return nil, err
 	}
 	o := opt.setDefaults()
-	var debugf = func(format string, v ...any) {}
+	debugf := func(format string, v ...any) {}
 	if o.Debug {
 		debugf = log.New(os.Stdout, "[clickhouse-std][opener] ", 0).Printf
 	}
@@ -419,11 +421,13 @@ func (r *stdRows) ColumnTypePrecisionScale(idx int) (precision, scale int64, ok 
 	return 0, 0, false
 }
 
-var _ driver.Rows = (*stdRows)(nil)
-var _ driver.RowsNextResultSet = (*stdRows)(nil)
-var _ driver.RowsColumnTypeDatabaseTypeName = (*stdRows)(nil)
-var _ driver.RowsColumnTypeNullable = (*stdRows)(nil)
-var _ driver.RowsColumnTypePrecisionScale = (*stdRows)(nil)
+var (
+	_ driver.Rows                           = (*stdRows)(nil)
+	_ driver.RowsNextResultSet              = (*stdRows)(nil)
+	_ driver.RowsColumnTypeDatabaseTypeName = (*stdRows)(nil)
+	_ driver.RowsColumnTypeNullable         = (*stdRows)(nil)
+	_ driver.RowsColumnTypePrecisionScale   = (*stdRows)(nil)
+)
 
 func (r *stdRows) Next(dest []driver.Value) error {
 	if len(r.rows.block.Columns) != len(dest) {
@@ -458,7 +462,7 @@ func (r *stdRows) Next(dest []driver.Value) error {
 						continue
 					}
 					rv := reflect.ValueOf(value)
-					value = rv.Elem().Interface()
+					value = reflect.Indirect(rv).Interface()
 				}
 
 				dest[i] = value
